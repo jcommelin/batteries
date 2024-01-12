@@ -43,6 +43,7 @@ initialize ignoreTacticKindsRef : IO.Ref NameHashSet ←
     |>.insert ``Lean.Parser.Tactic.case
     |>.insert ``Lean.Parser.Tactic.focus
     |>.insert ``Lean.Parser.Tactic.tacticSeqBracketed
+    |>.insert `Std.Tactic.«tacticOn_goal-_=>_» -- not in scope in this file
     -- |>.insert ``Parser.Term.binderTactic
     -- |>.insert ``Lean.Parser.Term.dynamicQuot
     -- |>.insert ``Lean.Parser.Tactic.quotSeq
