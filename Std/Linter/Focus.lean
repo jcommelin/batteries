@@ -6,9 +6,9 @@ Authors: Mario Carneiro
 import Lean.Elab.Command
 import Lean.Linter.Util
 import Std.Lean.Command
-import Std.Tactic.Unreachable
-
 import Lean.Elab.Tactic.BuiltinTactic
+
+import Std.Tactic.Unreachable -- should we depend on this?
 
 namespace Std.Linter
 open Lean Elab Command Linter
