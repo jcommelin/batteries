@@ -34,14 +34,15 @@ def getLinterFocus (o : Options) : Bool := getLinterValue linter.focus o
 /-- The monad for collecting used tactic syntaxes. -/
 abbrev M := StateRefT (HashMap String.Range Syntax) IO
 
-#check Lean.Elab.Tactic.evalTacticCDot
-
 /--
 A list of whitelisted syntax kinds, which are allowed to be used with multiple goals present.
 -/
 initialize ignoreTacticKindsRef : IO.Ref NameHashSet ←
   IO.mkRef <| HashSet.empty
     |>.insert ``cdot
+    |>.insert ``Lean.Parser.Tactic.case
+    |>.insert ``Lean.Parser.Tactic.focus
+    |>.insert ``Lean.Parser.Tactic.tacticSeqBracketed
     -- |>.insert ``Parser.Term.binderTactic
     -- |>.insert ``Lean.Parser.Term.dynamicQuot
     -- |>.insert ``Lean.Parser.Tactic.quotSeq
@@ -88,13 +89,13 @@ partial def findUnfocusedTactics : ContextInfo → InfoTree → M Unit
         | [_], _ => pure ()
         | _ :: bs, a :: as =>
           if as == bs || a :: as == bs then
-            dbg_trace s!"Syntax: {i.stx}"
+            -- dbg_trace s!"Syntax: {i.stx}"
             if let .node _ k _ := i.stx then
               if ignoreTacticKinds.contains k then
                 return ()
-              dbg_trace s!"Tactic kind: {k}"
-            let f ← i.format ctx
-            dbg_trace s!"TacticInfo: {f}"
+              -- dbg_trace s!"Tactic kind: {k}"
+            -- let f ← i.format ctx
+            -- dbg_trace s!"TacticInfo: {f}"
             modify (·.insert r i.stx)
         | _, _ => pure ()
     findUnfocusedTacticsList ctx c
@@ -115,7 +116,7 @@ def focusLinter : Linter where run := withSetOptionIn fun stx => do
   -- let some convs := Parser.ParserCategory.kinds <$> cats.find? `conv
   --   | return
   let trees ← getInfoTrees
-  dbg_trace s!"InfoTrees:\n{← trees.toList.mapM (·.format)}"
+  -- dbg_trace s!"InfoTrees:\n{← trees.toList.mapM (·.format)}"
   -- Hack:
   let ctx : ContextInfo := { env := ← getEnv, fileMap := default, ngen := default }
   let (_, map) ← (findUnfocusedTacticsList (← ignoreTacticKindsRef.get) ctx trees).run {}
