@@ -3,6 +3,7 @@ import Lean.Meta
 open Lean Lean.Meta
 
 /--
+import Std.Linter.Focus
 Obtain the inaccessible fvars from the given local context. An fvar is
 inaccessible if (a) its user name is inaccessible or (b) it is shadowed by a
 later fvar with the same user name.
