@@ -33,19 +33,6 @@ theorem heq_iff_eq : HEq a b ↔ a = b := ⟨eq_of_heq, heq_of_eq⟩
 @[simp] theorem eq_rec_constant {α : Sort _} {a a' : α} {β : Sort _} (y : β) (h : a = a') :
     (@Eq.rec α a (fun _ _ => β) y a' h) = y := by cases h; rfl
 
-theorem congrArg₂ (f : α → β → γ) {x x' : α} {y y' : β}
-    (hx : x = x') (hy : y = y') : f x y = f x' y' := by subst hx hy; rfl
-
-theorem congrFun₂ {β : α → Sort _} {γ : ∀ a, β a → Sort _}
-    {f g : ∀ a b, γ a b} (h : f = g) (a : α) (b : β a) :
-    f a b = g a b :=
-  congrFun (congrFun h _) _
-
-theorem congrFun₃ {β : α → Sort _} {γ : ∀ a, β a → Sort _} {δ : ∀ a b, γ a b → Sort _}
-      {f g : ∀ a b c, δ a b c} (h : f = g) (a : α) (b : β a) (c : γ a b) :
-    f a b c = g a b c :=
-  congrFun₂ (congrFun h _) _ _
-
 theorem funext₂ {β : α → Sort _} {γ : ∀ a, β a → Sort _}
     {f g : ∀ a b, γ a b} (h : ∀ a b, f a b = g a b) : f = g :=
   funext fun _ => funext <| h _
@@ -65,12 +52,6 @@ protected theorem Eq.congr (h₁ : x₁ = y₁) (h₂ : x₂ = y₂) : x₁ = x�
 theorem Eq.congr_left {x y z : α} (h : x = y) : x = z ↔ y = z := by rw [h]
 
 theorem Eq.congr_right {x y z : α} (h : x = y) : z = x ↔ z = y := by rw [h]
-
-alias congr_arg := congrArg
-alias congr_arg₂ := congrArg₂
-alias congr_fun := congrFun
-alias congr_fun₂ := congrFun₂
-alias congr_fun₃ := congrFun₃
 
 theorem heq_of_cast_eq : ∀ (e : α = β) (_ : cast e a = a'), HEq a a'
   | rfl, rfl => .rfl
